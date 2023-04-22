@@ -12,7 +12,7 @@ type ModalProps = {
 	footer?: React.ReactElement;
 	onClose: () => void;
 	onSubmit: () => void;
-	secondaryAcion?: () => void;
+	secondaryAction?: () => void;
 };
 const Modal: React.FC<ModalProps> = ({
 	isOpen,
@@ -24,9 +24,8 @@ const Modal: React.FC<ModalProps> = ({
 	footer,
 	onClose,
 	onSubmit,
-	secondaryAcion,
+	secondaryAction,
 }) => {
-	const CONTENT_ANIMATION_DURAITON = 300;
 	const [showModal, setShowModal] = useState(isOpen);
 
 	useEffect(() => {
@@ -37,12 +36,11 @@ const Modal: React.FC<ModalProps> = ({
 		if (disabled) {
 			return;
 		}
-
 		setShowModal(false);
 		// Delay onClose for animations
 		setTimeout(() => {
 			onClose();
-		}, CONTENT_ANIMATION_DURAITON);
+		}, 300);
 	}, [disabled, onClose]);
 
 	const handleSubmit = useCallback(() => {
@@ -54,12 +52,12 @@ const Modal: React.FC<ModalProps> = ({
 	}, [disabled, onSubmit]);
 
 	const handleSecondaryAction = useCallback(() => {
-		if (disabled || !secondaryAcion) {
+		if (disabled || !secondaryAction) {
 			return;
 		}
 
-		secondaryAcion();
-	}, [disabled, secondaryAcion]);
+		secondaryAction();
+	}, [disabled, secondaryAction]);
 
 	if (!isOpen) return null;
 
@@ -98,7 +96,7 @@ const Modal: React.FC<ModalProps> = ({
 					<div
 						className={`
                             translate
-                            duration-${`${CONTENT_ANIMATION_DURAITON}`}
+							duration-300
                             h-full
                             ${showModal ? "translate-y-0" : "translate-y-full"}
                             ${showModal ? "opacity-100" : "opacity-0"}
@@ -161,7 +159,7 @@ const Modal: React.FC<ModalProps> = ({
 							{/* FOOTER */}
 							<div className="flex flex-col gap-2 p-6">
 								<div className="flex flex-row items-center gap-4 w-full">
-									{secondaryAcion && seconndaryActionLabel && (
+									{secondaryAction && seconndaryActionLabel && (
 										<Button
 											outline
 											disabled={disabled}
