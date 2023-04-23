@@ -7,6 +7,8 @@ import { useMemo, useState } from "react";
 import Heading from "../Heading";
 import { categories } from "../navbar/Categories";
 import CatetgoryInput from "../Inputs/CatetgoryInput";
+import CountrySelect from "../Inputs/CountrySelect";
+import dynamic from "next/dynamic";
 
 enum STETPS {
 	CATEGOY = 0,
@@ -43,6 +45,14 @@ const RentModal = () => {
 	});
 
 	const category = watch("category");
+	const location = watch("location");
+	const Map = useMemo(
+		() =>
+			dynamic(() => import("../Map"), {
+				ssr: false,
+			}),
+		[location]
+	);
 
 	const setCustomValue = (id: string, value: any) => {
 		setValue(id, value, {
@@ -107,6 +117,24 @@ const RentModal = () => {
 		</div>
 	);
 
+	if (step === STETPS.LOCATION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Where is your place located?"
+					subTitle="Help guests find you!"
+				/>
+				<CountrySelect
+					onChange={(value) => {
+						setCustomValue("location", value);
+					}}
+					value={location}
+				/>
+				<Map center={location?.latlng} label={location?.label} />
+			</div>
+		);
+	}
+
 	return (
 		<Modal
 			isOpen={rentModal.isOpen}
@@ -115,7 +143,7 @@ const RentModal = () => {
 			seconndaryActionLabel={secondaryActtionLabel}
 			secondaryAction={step === STETPS.CATEGOY ? undefined : onBack}
 			onClose={rentModal.onClose}
-			onSubmit={rentModal.onClose}
+			onSubmit={onNext}
 			body={bodyContent}
 		/>
 	);
