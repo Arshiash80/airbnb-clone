@@ -10,6 +10,7 @@ import CatetgoryInput from "../Inputs/CatetgoryInput";
 import CountrySelect from "../Inputs/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../Inputs/Counter";
+import ImageUpload from "../Inputs/ImageUpload";
 
 enum STETPS {
 	CATEGOY = 0,
@@ -49,6 +50,7 @@ const RentModal = () => {
 	const location = watch("location");
 	const guestCount = watch("guestCount");
 	const roomCount = watch("roomCount");
+	const imageSrc = watch("imageSrc");
 	const bathroomCount = watch("bathroomCount");
 
 	const Map = useMemo(
@@ -168,6 +170,22 @@ const RentModal = () => {
 					subTitle="How many bathrooms do you have?"
 					value={bathroomCount}
 					onChange={(value) => setCustomValue("bathroomCount", value)}
+				/>
+			</div>
+		);
+	}
+
+	if (step === STETPS.IMAGES) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Add a photo of your place"
+					subTitle="Show guests what your place looks like!"
+				/>
+
+				<ImageUpload
+					value={imageSrc}
+					onChange={(value) => setCustomValue("imageSrc", value)}
 				/>
 			</div>
 		);
