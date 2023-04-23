@@ -1,15 +1,15 @@
 import { create } from "zustand"
 
-interface ILoginModalStore {
+interface IRentModalStore {
     isOpen: boolean
     onOpen: () => void
     onClose: () => void
 }
 
-const useLoginModal = create<ILoginModalStore>((set) => ({
+const useRentModal = create<IRentModalStore>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false })
 }))
 
-export default useLoginModal
+export default useRentModal
