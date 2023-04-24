@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useRentModal from "@/app/hooks/useRentModal";
 import Modal from "./Modal";
 import { useMemo, useState } from "react";
@@ -11,6 +11,10 @@ import CountrySelect from "../Inputs/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../Inputs/Counter";
 import ImageUpload from "../Inputs/ImageUpload";
+import Input from "../Inputs/Input";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 enum STETPS {
 	CATEGOY = 0,
@@ -22,6 +26,8 @@ enum STETPS {
 }
 
 const RentModal = () => {
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
 	const rentModal = useRentModal();
 	const [step, setStep] = useState<STETPS>(STETPS.CATEGOY);
 
@@ -33,6 +39,7 @@ const RentModal = () => {
 		formState: { errors },
 		reset,
 	} = useForm<FieldValues>({
+		mode: "onChange",
 		defaultValues: {
 			category: "",
 			location: null,
@@ -52,6 +59,10 @@ const RentModal = () => {
 	const roomCount = watch("roomCount");
 	const imageSrc = watch("imageSrc");
 	const bathroomCount = watch("bathroomCount");
+
+	const title = watch("title");
+	const price = watch("price");
+	const description = watch("description");
 
 	const Map = useMemo(
 		() =>
@@ -77,6 +88,34 @@ const RentModal = () => {
 
 	const onNext = () => {
 		setStep((value) => value + 1);
+	};
+
+	const onSubmit: SubmitHandler<FieldValues> = (data) => {
+		if (step !== STETPS.PRICE) return onNext();
+
+		setIsLoading(true);
+		// Create listing
+		axios
+			.post("/api/listings", data)
+			.then(() => {
+				// Show success message.
+				toast.success("Listing created!");
+				// Refresh the page.
+				router.refresh();
+				// Reset the react form
+				reset();
+				// Go back to first step.
+				setStep(STETPS.CATEGOY);
+				// Close the modal.
+				rentModal.onClose();
+			})
+			.catch((err) => {
+				toast.error("Something went wrong.");
+				console.error("Error: ", err);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	};
 
 	const actionLabel = useMemo(() => {
@@ -142,9 +181,7 @@ const RentModal = () => {
 				<Map center={location?.latlng} label={location?.label} />
 			</div>
 		);
-	}
-
-	if (step === STETPS.INFO) {
+	} else if (step === STETPS.INFO) {
 		bodyContent = (
 			<div className="flex flex-col gap-8">
 				<Heading
@@ -173,9 +210,7 @@ const RentModal = () => {
 				/>
 			</div>
 		);
-	}
-
-	if (step === STETPS.IMAGES) {
+	} else if (step === STETPS.IMAGES) {
 		bodyContent = (
 			<div className="flex flex-col gap-8">
 				<Heading
@@ -189,17 +224,63 @@ const RentModal = () => {
 				/>
 			</div>
 		);
+	} else if (step === STETPS.DESCRIPTION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="How would you describe your place?"
+					subTitle="Short and sweet works best!"
+				/>
+				<Input
+					id="title"
+					label="Title"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+				<hr />
+				<Input
+					id="description"
+					label="Description"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+			</div>
+		);
+	} else if (step === STETPS.PRICE) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Now, set your price"
+					subTitle="How much do you charge per night?"
+				/>
+				<Input
+					id="price"
+					label="Price"
+					formatPrice
+					type="number"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+			</div>
+		);
 	}
 
 	return (
 		<Modal
+			disabled={isLoading}
 			isOpen={rentModal.isOpen}
 			title="Airbnb your home!"
 			actionLabel={actionLabel}
 			seconndaryActionLabel={secondaryActtionLabel}
 			secondaryAction={step === STETPS.CATEGOY ? undefined : onBack}
 			onClose={rentModal.onClose}
-			onSubmit={onNext}
+			onSubmit={handleSubmit(onSubmit)}
 			body={bodyContent}
 		/>
 	);

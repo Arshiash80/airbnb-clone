@@ -38,7 +38,7 @@ const Input: React.FC<InputProps> = ({
 				id={id}
 				disabled={disabled}
 				{...register(id, { required })}
-				// It's needs tto be a empty space.
+				// It's needs to be a empty space.
 				// For floating animation
 				placeholder=" "
 				type={type}
@@ -65,7 +65,8 @@ const Input: React.FC<InputProps> = ({
                 `}
 			/>
 			<label
-				className={`
+				className={` 
+					pointer-events-none
                     absolute
                     text-md
                     duration-150
