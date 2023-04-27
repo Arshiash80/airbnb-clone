@@ -2,16 +2,14 @@
 import useCountries from "@/app/hooks/useCountries";
 import Select from "react-select";
 
-export interface ICountrySelectValue {
-	flag: string;
-	label: string;
-	latlng: number[];
-	region: string;
-	value: string;
-}
 type CountrySelectProps = {
-	value?: ICountrySelectValue;
-	onChange: (value: ICountrySelectValue) => void;
+	/** Selected coutry object as `IFormattedCountry` */
+	value?: IFormattedCountry;
+	/**
+	 * Handle on change
+	 * @param value Country object `<IFormattedCountry>`
+	 */
+	onChange: (value: IFormattedCountry) => void;
 };
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
 	const { getAll } = useCountries();
@@ -22,7 +20,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
 				isClearable
 				options={getAll()}
 				value={value}
-				onChange={(value) => onChange(value as ICountrySelectValue)}
+				onChange={(value) => onChange(value as IFormattedCountry)}
 				formatOptionLabel={(option: any) => (
 					<div className="flex flex-row items-center gap-3">
 						<div>{option.flag}</div>

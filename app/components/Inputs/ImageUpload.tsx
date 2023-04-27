@@ -47,6 +47,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
                         items-center 
                         gap-4 
                         text-neutral-600
+						h-[60vh]
                     "
 				>
 					{value ? (
@@ -55,7 +56,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
 								alt="Upload"
 								fill
 								style={{
-									objectFit: "contain",
+									objectFit: "cover",
 								}}
 								src={value}
 							/>

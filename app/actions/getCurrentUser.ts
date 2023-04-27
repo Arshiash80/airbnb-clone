@@ -6,15 +6,20 @@ import type { SafeUser } from "../@types/user";
 export const getSession = async () => {
     return await getServerSession(authOptions)
 }
-
+/**
+ * Get currentt signed in user using user session.
+ * @returns Optional user object `<SafeUser | null>`
+ */
 export const getCurrentUser = async (): Promise<SafeUser | null> => {
     try {
         const session = await getSession()
 
         if (!session?.user?.email) {
+            // User object not found.
             return null
         }
 
+        // Find user by email
         const currentUser = await prisma.user.findUnique({
             where: {
                 email: session.user.email as string
@@ -22,9 +27,11 @@ export const getCurrentUser = async (): Promise<SafeUser | null> => {
         })
 
         if (!currentUser) {
+            // User not exists in db
             return null
         }
 
+        // Return the user as `<SafeUser>`
         return {
             ...currentUser,
             createdAt: currentUser.createdAt.toISOString(),

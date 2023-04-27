@@ -60,10 +60,6 @@ const RentModal = () => {
 	const imageSrc = watch("imageSrc");
 	const bathroomCount = watch("bathroomCount");
 
-	const title = watch("title");
-	const price = watch("price");
-	const description = watch("description");
-
 	const Map = useMemo(
 		() =>
 			// Import custom Map component.

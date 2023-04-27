@@ -3,11 +3,20 @@
 import { IconType } from "react-icons";
 
 type ButtonProps = {
+	/** Button label */
 	label: string;
+	/** Disables buttomn if `true` */
 	disabled?: boolean;
+	/** Outline version of button */
 	outline?: boolean;
+	/** Small version of button */
 	small?: boolean;
+	/** Optional Icon for button */
 	icon?: IconType;
+	/**
+	 * On click action for button
+	 * @param e: Mouse event. `<React.MouseEvent<HTMLButtonElement>>`
+	 */
 	onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
