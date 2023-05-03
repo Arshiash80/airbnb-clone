@@ -113,7 +113,7 @@ const LoginModal = () => {
 						gap-2
 					"
 				>
-					<div>Don't have an account ?</div>
+					<div>Dont have an account ?</div>
 					<div
 						onClick={toggle}
 						className="
