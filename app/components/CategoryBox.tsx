@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ICategory } from "../@types/category";
+import type { ICategory } from "../@types/category";
 import { useCallback } from "react";
 import qs from "query-string";
 

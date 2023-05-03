@@ -1,5 +1,5 @@
 import prisma from "@/app/libs/prismadb"
-import { SafeListing } from "../@types/listing"
+import type { SafeListing } from "../@types/listing"
 
 /**
  * Get listings from dattabase with prisma
@@ -13,9 +13,10 @@ export const getListings = async (): Promise<SafeListing[]> => {
             }
         })
 
-        const safeListings = listings.map(listing => ({
+        // Convert listing array to SafeListing[]
+        const safeListings: SafeListing[] = listings.map(listing => ({
             ...listing,
-            createdAt: listing.createdAt.toString()
+            createdAt: listing.createdAt.toISOString()
         }))
 
         return safeListings

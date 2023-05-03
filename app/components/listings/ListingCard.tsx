@@ -1,10 +1,11 @@
 "use client";
-import { Reservation } from "@prisma/client";
-import { SafeUser } from "@/app/@types/user";
+import Image from "next/image";
 
+import { Reservation } from "@prisma/client";
 import { format } from "date-fns";
 
-import Image from "next/image";
+import type { SafeUser } from "@/app/@types/user";
+import type { SafeListing } from "@/app/@types/listing";
 
 import useCountries from "@/app/hooks/useCountries";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,6 @@ import { useCallback, useMemo } from "react";
 
 import HeartButton from "../HeartButton";
 import Button from "../Button";
-import { SafeListing } from "@/app/@types/listing";
 
 type ListingCardProps = {
 	/** Listing datat */
@@ -91,6 +91,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
 	return (
 		<div
+			// Open listing page
 			onClick={() => router.push(`/listings/${data.id}`)}
 			className="col-span-1 cursor-pointer group"
 		>
